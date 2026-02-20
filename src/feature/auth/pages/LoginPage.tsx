@@ -30,13 +30,14 @@ export default function LoginPage() {
               placeholder="••••••••"
             />
           </div>
-
+          <Link to={"/dashboard"}>
           <button
             type="submit"
             className="w-full rounded bg-white py-2 font-medium text-blue-600 hover:bg-gray-400 transition"
           >
             Login
           </button>
+          </Link>
           <Link to={"/register"}>
             <div className="text-white">
                 no account? create one...

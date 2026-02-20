@@ -6,14 +6,14 @@ function AppLayout() {
   const location = useLocation();
 
   const isAuthPage =
-    location.pathname === "/login" ||
+    location.pathname === "/" ||
     location.pathname === "/register";
 
   return (
     <div className="flex h-screen">
       {!isAuthPage && <Sidebar />}
 
-      <main className="flex-1 overflow-y-auto p-16 md:ml-10 bg-white">
+      <main className="flex-1 overflow-y-auto p-16 md:ml-5 bg-white">
         <AppRoutes />
       </main>
     </div>

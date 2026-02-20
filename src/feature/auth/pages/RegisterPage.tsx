@@ -49,7 +49,7 @@ export default function RegisterPage() {
             Create Account
           </button>
 
-          <Link to="/login">
+          <Link to="/">
             <div className="text-center text-sm text-white hover:underline">
               back to login…
             </div>

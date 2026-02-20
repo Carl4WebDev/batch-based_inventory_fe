@@ -4,90 +4,78 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const handleClose = () => setIsOpen(false);
 
   return (
     <>
-      {/* Mobile Hamburger */}
-      {isMobile && !isMobileOpen && (
-        <button
-          onClick={() => setIsMobileOpen(true)}
-          className="fixed top-4 left-4 z-50 rounded-md border border-blue-600 px-3 py-2 text-blue-600 bg-white"
-        >
-          ☰
-        </button>
-      )}
+      {/* Hamburger */}
+      <button
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="fixed top-4 left-4 z-50 rounded-md border border-blue-600 px-3 py-2 text-blue-600 bg-white"
+      >
+        {isOpen ? "✕" : "☰"}
+      </button>
+
+      {/* Overlay */}
+      <div
+        onClick={handleClose}
+        className={`
+          fixed inset-0 bg-black/20 z-30
+          transition-opacity duration-300
+          ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}
+        `}
+      />
 
       {/* Sidebar */}
       <aside
         className={`
           fixed top-0 left-0 z-40
           h-screen flex flex-col bg-white
-          border-r border-blue-100
-          transition-all duration-200 border-4 border-blue-600
-          ${
-            isMobile
-              ? isMobileOpen
-                ? "w-full"
-                : "hidden"
-              : isCollapsed
-              ? "w-16"
-              : "w-56"
-          }
+          border-r border-blue-100 border-4 border-blue-600
+          ${isMobile ? "w-full" : "w-56"}
+          transform transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-blue-100">
-          {!isCollapsed && (
-            <span className="text-lg font-semibold text-blue-700">
-              Batch-Based
-            </span>
-          )}
-
-          <button
-            onClick={() =>
-              isMobile
-                ? setIsMobileOpen(false)
-                : setIsCollapsed(!isCollapsed)
-            }
-            className="text-blue-700 hover:text-blue-900 text-sm"
-          >
-            {isMobile ? "✕" : isCollapsed ? "»" : "«"}
-          </button>
+        <div className="flex items-center justify-end px-4 py-5 border-b border-blue-100">
+          <span className="text-lg font-semibold text-blue-700">
+            Batch-Based
+          </span>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-2 py-6 space-y-1">
-          <Link to={"/dashboard"}>
-            <SidebarItem label="Dashboard" collapsed={isCollapsed} />
+          <Link to={"/dashboard"} onClick={handleClose}>
+            <SidebarItem label="Dashboard" />
           </Link>
-          <Link to={"/manage-business"}>
-            <SidebarItem label="Manage Business" collapsed={isCollapsed} />
+
+          <Link to={"/manage-business"} onClick={handleClose}>
+            <SidebarItem label="Manage Business" />
           </Link>
         </nav>
+
+        {/* Logout (bottom) */}
+        <div className="p-2 border-t border-blue-100">
+          <Link
+            to={"/"}
+            onClick={handleClose}
+            className="block w-full rounded-md px-3 py-3 text-sm font-medium text-white bg-blue-900 hover:bg-blue-800 text-center"
+          >
+            Logout
+          </Link>
+        </div>
       </aside>
     </>
   );
 }
 
-function SidebarItem({
-  label,
-  collapsed,
-}: {
-  label: string;
-  collapsed: boolean;
-}) {
+function SidebarItem({ label }) {
   return (
     <div className="flex items-center rounded-md px-3 py-3 text-sm font-medium text-blue-700 hover:bg-blue-50 cursor-pointer">
-      {!collapsed ? (
-        <span>{label}</span>
-      ) : (
-        <span className="mx-auto text-xs text-blue-700">
-          {label.charAt(0)}
-        </span>
-      )}
+      <span>{label}</span>
     </div>
   );
 }
